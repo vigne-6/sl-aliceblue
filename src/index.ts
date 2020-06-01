@@ -1,4 +1,5 @@
 import * as fastify from "fastify"
+import fetch from 'node-fetch'
 
 const server:fastify.FastifyInstance = fastify.default({logger:true})
 
