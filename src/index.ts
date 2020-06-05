@@ -18,14 +18,14 @@ const servers: Array<string> = [
     "https://sl-thistle.glitch.me"
 ]
 let latency: any = {}
-let users: Object = {}
+let users: any = {}
 
 setInterval(
     () => {
         servers.forEach(async server => {
             const b4fetch: number = new Date().getTime()
             fetch(server).then(
-                ()=>{
+                () => {
                     const l: number = new Date().getTime() - b4fetch
                     latency[server] = l / 2
                 }
@@ -47,13 +47,35 @@ server.get(
 server.get(
     "/route",
     async (req, res) => {
-
+        const arr = [
+            {latency : latency['http://slimeserver.herokuapp.com'], name: "http://slimeserver.herokuapp.com"},
+            {latency : latency['http://sl-azure.herokuapp.com'], name: "http://sl-azure.herokuapp.com"},
+            {latency : latency['http://sl-crimson.herokuapp.com'], name: "http://sl-crimson.herokuapp.com"},
+            {latency : latency['http://sl-magenta.herokuapp.com'], name: "http://sl-magenta.herokuapp.com"},
+            {latency : latency["http://sl-firebrick.herokuapp.com"], name: "http://sl-firebrick.herokuapp.com"}
+        ]
+        arr.sort(function(a, b){return a.latency - b.latency})
+        if(req.query.nomor == undefined || req.query.nomor == null){
+            return`NullPointerException: Query is not an instance of object`
+        }
+        users[req.query.nomor] = arr[0].name
+        res.send (arr[0].name)
     }
 )
 server.get(
     "/latency",
     async (req, res) => {
         res.send(JSON.stringify(latency))
+    }
+)
+
+server.get(
+    "/user",
+    async (req, res) => {
+        if(req.query.nomor == undefined || req.query.nomor == null){
+            return`NullPointerException: Query is instance of null`
+        }
+        res.send(users[req.query.nomor])
     }
 )
 const PORT: any = process.env.PORT || "5000"
