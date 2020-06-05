@@ -14,10 +14,26 @@
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
       font-weight: lighter;
     }
-    #latency{
+
+    #latency {
       max-width: 800px;
       max-height: 400px;
     }
+
+    #latency-container {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    #latency-block {
+      width: 200px;
+      height: 200px;
+      margin: 10px;
+      margin-top: 70px;
+      background-color: #343436;
+    }
+
     #navbar {
       background-color: #343438;
       display: flex;
@@ -52,24 +68,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"
     integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
   <script>
-    const Navbar = () => {
-      return (`
-    <div id="navbar">
-      <div class="navbar-inside">
-        <div class="logo">SlimeChat Monitor<div>
-      </div>
-    </div>
-    `)
-    }
-    const Main = () => {
-      return (`
-    <div id="main">
-      <div id="latency">
-        <canvas id="myChart" width="1600" height="900"></canvas>
-      </div>
-    </div>
-      `)
-    }
+    //module declaration
     const render = (component, targetID) => {
       if (typeof component == "string") {
         document.getElementById(targetID).innerHTML = component
@@ -86,109 +85,188 @@
         console.error("unrecognized component type, expected type : string got : " + typeof component)
       }
     }
+
+  </script>
+  <script>
+    const Navbar = () => {
+      return (`
+    <div id="navbar">
+      <div class="navbar-inside">
+        <div class="logo">SlimeChat Monitor<div>
+      </div>
+    </div>
+    `)
+    }
+    let latency = {}
+    fetch(window.location.href + "latency").then(data => data.json()).then(data => { latency = data })
+
+
+    const latencyBlock = (server, latency) => {
+      let color
+      if (latency > 200) {
+        color = "#ffd300"
+      }
+      if (latency > 500) {
+        color = "#ff2400"
+      }
+      if (latency < 200) {
+        color = "green"
+      }
+      return (
+        `
+        <div id="latency-block">
+          <div style="
+            margin:10px;
+            
+          ">
+          <p style="
+            color:#ffffff72;
+          ">${server}</p><br>
+          <h1 style="color:${color};text-align:center;">
+          ${latency} ms
+          </h1>
+          </div>
+        </div>
+        `
+      )
+    }
+    const latencyPart = () => {
+      return `
+      <div id="latency-container">
+        ${latencyBlock("SlimeServer", latency['http://slimeserver.herokuapp.com'])}
+        ${latencyBlock("Sl-Indigo", latency['https://sl-indigo.glitch.me'])}
+        ${latencyBlock("Sl-Azure", latency['http://sl-azure.herokuapp.com'])}
+        ${latencyBlock("Sl-crimson", latency['http://sl-crimson.herokuapp.com'])}
+        ${latencyBlock("Sl-Magenta", latency['http://sl-magenta.herokuapp.com'])}
+        ${latencyBlock("Sl-FireBrick", latency["http://sl-firebrick.herokuapp.com"])}
+        ${latencyBlock("Sl-Thistle", latency['https://sl-thistle.glitch.me'])}
+        ${latencyBlock("Sl-Linen", latency['https://sl-linen.glitch.me'])}
+        ${latencyBlock("Sl-SlateBlue", latency['https://sl-slateblue.glitch.me'])}
+        ${latencyBlock("Sl-Sienna", latency['https://sl-sienna.glitch.me'])}
+        ${latencyBlock("Sl-Ivory", latency['https://sl-ivory.glitch.me'])}
+        ${latencyBlock("Sl-Navy", latency['https://sl-navy.glitch.me'])}  
+      </div>
+      `
+    }
+    const Main = () => {
+      return (`
+    <div id="main">
+      <div id="latency">
+        <canvas id="myChart" width="1600" height="900"></canvas>
+      </div>
+      <div id="whatever">
+      </div>
+    </div>
+      `)
+    }
     render(Navbar(), "app")
     renderNew(Main(), "app")
+    render(latencyPart(), "whatever")
+    setInterval(() => {
+      fetch(window.location.href + "latency").then(data => data.json()).then(data => { latency = data })
+      render(latencyPart(), "whatever")
+    }, 1000)
     const ctx = document.getElementById("myChart").getContext('2d')
     const myChart = new Chart(ctx, {
       type: 'line',
       data: {
         labels: ['07:00', '08:00', '09:00', '10:00', '11:00', '12:00'],
         datasets: [{
-            label: 'SlimeServer Latency ',
-            data: [10, 300, 500, 100, 80, 90],
-            borderColor:"#ff80b0",
-            fill:false,
-            borderWidth: 1
+          label: 'SlimeServer Latency ',
+          data: [10, 300, 500, 100, 80, 90],
+          borderColor: "#ff80b0",
+          fill: false,
+          borderWidth: 1
         },
         {
-            label: 'Sl-Azure Latency ',
-            data: [40, 190, 100, 240, 360, 300],
-            borderColor:"#80ffb0",
-            fill:false,
-            borderWidth: 1
+          label: 'Sl-Azure Latency ',
+          data: [40, 190, 100, 240, 360, 300],
+          borderColor: "#80ffb0",
+          fill: false,
+          borderWidth: 1
         },
         {
-            label: 'Sl-Crimson Latency ',
-            data: [5, 120, 180, 130, 240, 200],
-            borderColor:"#80b0ff",
-            fill:false,
-            borderWidth: 1
+          label: 'Sl-Crimson Latency ',
+          data: [5, 120, 180, 130, 240, 200],
+          borderColor: "#80b0ff",
+          fill: false,
+          borderWidth: 1
         },
         {
-            label: 'Sl-FireBrick Latency ',
-            data: [20, 80, 240, 390, 180, 80],
-            borderColor:"#b0ff80",
-            fill:false,
-            borderWidth: 1
+          label: 'Sl-FireBrick Latency ',
+          data: [20, 80, 240, 390, 180, 80],
+          borderColor: "#b0ff80",
+          fill: false,
+          borderWidth: 1
         },
         {
-            label: 'Sl-Magenta Latency ',
-            data: [2, 80, 60, 360, 230, 300],
-            borderColor:"#ffb080",
-            fill:false,
-            borderWidth: 1
+          label: 'Sl-Magenta Latency ',
+          data: [2, 80, 60, 360, 230, 300],
+          borderColor: "#ffb080",
+          fill: false,
+          borderWidth: 1
         },
         {
-            label: 'Sl-Indigo Latency ',
-            data: [10, 80, 50, 120, 50, 40],
-            borderColor:"#b080ff",
-            fill:false,
-            borderWidth: 1
+          label: 'Sl-Indigo Latency ',
+          data: [10, 80, 50, 120, 50, 40],
+          borderColor: "#b080ff",
+          fill: false,
+          borderWidth: 1
         },
         {
-            label: 'Sl-Ivory Latency ',
-            data: [10, 70, 30, 40, 20, 80],
-            borderColor:"#ff8080",
-            fill:false,
-            borderWidth: 1
+          label: 'Sl-Ivory Latency ',
+          data: [10, 70, 30, 40, 20, 80],
+          borderColor: "#ff8080",
+          fill: false,
+          borderWidth: 1
         },
         {
-            label: 'Sl-Linen Latency ',
-            data: [5, 10, 30, 20, 10, 50],
-            borderColor:"#80ffb0",
-            fill:false,
-            borderWidth: 1
+          label: 'Sl-Linen Latency ',
+          data: [5, 10, 30, 20, 10, 50],
+          borderColor: "#80ffb0",
+          fill: false,
+          borderWidth: 1
         },
         {
-            label: 'Sl-Navy Latency ',
-            data: [30, 240, 380, 580, 480, 600],
-            borderColor:"#ff8080",
-            fill:false,
-            borderWidth: 1
+          label: 'Sl-Navy Latency ',
+          data: [30, 240, 380, 580, 480, 600],
+          borderColor: "#ff8080",
+          fill: false,
+          borderWidth: 1
         },
         {
-            label: 'Sl-Sienna Latency ',
-            data: [10, 10, 30, 20, 5, 10],
-            borderColor:"#ffb0ff",
-            fill:false,
-            borderWidth: 1
+          label: 'Sl-Sienna Latency ',
+          data: [10, 10, 30, 20, 5, 10],
+          borderColor: "#ffb0ff",
+          fill: false,
+          borderWidth: 1
         },
         {
-            label: 'Sl-SlateBlue Latency ',
-            data: [7, 10, 3, 10, 80, 20],
-            borderColor:"#ffff80",
-            fill:false,
-            borderWidth: 1
+          label: 'Sl-SlateBlue Latency ',
+          data: [7, 10, 3, 10, 80, 20],
+          borderColor: "#ffff80",
+          fill: false,
+          borderWidth: 1
         },
         {
-            label: 'Sl-Thistle Latency ',
-            data: [30, 80, 10, 20, 5, 0],
-            borderColor:"#b0b0ff",
-            fill:false,
-            borderWidth: 1
+          label: 'Sl-Thistle Latency ',
+          data: [30, 80, 10, 20, 5, 0],
+          borderColor: "#b0b0ff",
+          fill: false,
+          borderWidth: 1
         }]
       },
-      options:{
-        color:function(context){
+      options: {
+        color: function (context) {
           const index = context.dataIndex;
           const value = context.dataset.data[index];
-          if(value >= 200 && value <= 500){
+          if (value >= 200 && value <= 500) {
             return "yellow"
           }
-          else if(value > 500){
+          else if (value > 500) {
             return "red"
           }
-          else{
+          else {
             return "green"
           }
         }
