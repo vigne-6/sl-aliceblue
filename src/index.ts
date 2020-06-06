@@ -19,6 +19,7 @@ const servers: Array<string> = [
 ]
 let latency: any = {}
 let users: any = {}
+const alfabet = ["a", "2", "e", "1", "f", "4", "d", "5", "c", "6", "a", "9", "d", "0", "b", "3", "6", "c", "8", "c", "4", "c", "1", "b", "a", "5", "e", "3", "1", "5", "6", "7", "1", "4", "5", "b", "e", "f", "f", "f", "1", "3", "4", "7", "9", "a", "e", "1", "d", "b", "2", "6", "b", "7", "7"]
 
 setInterval(
     () => {
@@ -48,18 +49,18 @@ server.get(
     "/route",
     async (req, res) => {
         const arr = [
-            {latency : latency['http://slimeserver.herokuapp.com'], name: "http://slimeserver.herokuapp.com"},
-            {latency : latency['http://sl-azure.herokuapp.com'], name: "http://sl-azure.herokuapp.com"},
-            {latency : latency['http://sl-crimson.herokuapp.com'], name: "http://sl-crimson.herokuapp.com"},
-            {latency : latency['http://sl-magenta.herokuapp.com'], name: "http://sl-magenta.herokuapp.com"},
-            {latency : latency["http://sl-firebrick.herokuapp.com"], name: "http://sl-firebrick.herokuapp.com"}
+            { latency: latency['http://slimeserver.herokuapp.com'], name: "http://slimeserver.herokuapp.com" },
+            { latency: latency['http://sl-azure.herokuapp.com'], name: "http://sl-azure.herokuapp.com" },
+            { latency: latency['http://sl-crimson.herokuapp.com'], name: "http://sl-crimson.herokuapp.com" },
+            { latency: latency['http://sl-magenta.herokuapp.com'], name: "http://sl-magenta.herokuapp.com" },
+            { latency: latency["http://sl-firebrick.herokuapp.com"], name: "http://sl-firebrick.herokuapp.com" }
         ]
-        arr.sort(function(a, b){return a.latency - b.latency})
-        if(req.query.nomor == undefined || req.query.nomor == null){
-            return`NullPointerException: Query is not an instance of object`
+        arr.sort(function (a, b) { return a.latency - b.latency })
+        if (req.query.nomor == undefined || req.query.nomor == null) {
+            return `NullPointerException: Query is not an instance of object`
         }
         users[req.query.nomor] = arr[0].name
-        res.send (arr[0].name)
+        res.send(arr[0].name)
     }
 )
 server.get(
@@ -72,10 +73,18 @@ server.get(
 server.get(
     "/user",
     async (req, res) => {
-        if(req.query.nomor == undefined || req.query.nomor == null){
-            return`NullPointerException: Query is instance of null`
+        if (req.query.token == undefined || req.query.token == null) {
+            return `NullPointerException: Query is instance of null`
         }
-        res.send(users[req.query.nomor])
+        const time = `${new Date().getFullYear() * new Date().getSeconds()}${new Date().getDate() * new Date().getSeconds()}${new Date().getHours() * new Date().getSeconds()}${new Date().getMinutes() * new Date().getSeconds()}${new Date().getSeconds() * new Date().getSeconds()}`
+        let token = ""
+        time.split("").forEach(t => {
+            const a:number = Number.parseInt(t)
+            token = token + alfabet[a]
+        })
+        if(token == req.query.token){
+            res.send(JSON.stringify(users))
+        }
     }
 )
 const PORT: any = process.env.PORT || "5000"
