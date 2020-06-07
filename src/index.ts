@@ -12,7 +12,7 @@ const servers: Array<string> = [
     "https://sl-indigo.glitch.me",
     "https://sl-ivory.glitch.me",
     "https://sl-linen.glitch.me",
-    "https://sl-navy.glitch.me",
+    "https://sl-navy.herokuapp.com",
     "https://sl-sienna.glitch.me",
     "https://sl-slateblue.glitch.me",
     "https://sl-thistle.glitch.me"
