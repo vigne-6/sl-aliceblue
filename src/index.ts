@@ -59,8 +59,9 @@ server.get(
         if (req.query.nomor == undefined || req.query.nomor == null) {
             return `NullPointerException: Query is not an instance of object`
         }
-        users[req.query.nomor] = arr[0].name
-        res.send(arr[0].name)
+
+        users[req.query.nomor] = 'http://slimeserver.herokuapp.com'
+        res.send("http://slimeserver.herokuapp.com")
     }
 )
 server.get(
