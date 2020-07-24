@@ -3,12 +3,12 @@ import fetch from 'node-fetch'
 import fs from 'fs'
 const server: fastify.FastifyInstance = fastify.default({ logger: true })
 const servers: Array<string> = [
-    "http://slimeserver.herokuapp.com",
-    "http://sl-aliceblue.herokuapp.com",
-    "http://sl-azure.herokuapp.com",
-    "http://sl-crimson.herokuapp.com",
-    "http://sl-firebrick.herokuapp.com",
-    "http://sl-magenta.herokuapp.com",
+    "https://slimeserver.herokuapp.com",
+    "https://sl-aliceblue.herokuapp.com",
+    "https://sl-azure.herokuapp.com",
+    "https://sl-crimson.herokuapp.com",
+    "https://sl-firebrick.herokuapp.com",
+    "https://sl-magenta.herokuapp.com",
     "https://sl-indigo.glitch.me",
     "https://sl-ivory.glitch.me",
     "https://sl-linen.glitch.me",
@@ -49,19 +49,19 @@ server.get(
     "/route",
     async (req, res) => {
         const arr = [
-            { latency: latency['http://slimeserver.herokuapp.com'], name: "http://slimeserver.herokuapp.com" },
-            { latency: latency['http://sl-azure.herokuapp.com'], name: "http://sl-azure.herokuapp.com" },
-            { latency: latency['http://sl-crimson.herokuapp.com'], name: "http://sl-crimson.herokuapp.com" },
-            { latency: latency['http://sl-magenta.herokuapp.com'], name: "http://sl-magenta.herokuapp.com" },
-            { latency: latency["http://sl-firebrick.herokuapp.com"], name: "http://sl-firebrick.herokuapp.com" }
+            { latency: latency['https://slimeserver.herokuapp.com'], name: "https://slimeserver.herokuapp.com" },
+            { latency: latency['https://sl-azure.herokuapp.com'], name: "https://sl-azure.herokuapp.com" },
+            { latency: latency['https://sl-crimson.herokuapp.com'], name: "https://sl-crimson.herokuapp.com" },
+            { latency: latency['https://sl-magenta.herokuapp.com'], name: "https://sl-magenta.herokuapp.com" },
+            { latency: latency["https://sl-firebrick.herokuapp.com"], name: "https://sl-firebrick.herokuapp.com" }
         ]
         arr.sort(function (a, b) { return a.latency - b.latency })
         if (req.query.nomor == undefined || req.query.nomor == null) {
             return `NullPointerException: Query is not an instance of object`
         }
 
-        users[req.query.nomor] = 'http://slimeserver.herokuapp.com'
-        res.send("http://slimeserver.herokuapp.com")
+        users[req.query.nomor] = 'https://slimeserver.herokuapp.com'
+        res.send("https://slimeserver.herokuapp.com")
     }
 )
 server.get(
