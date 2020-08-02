@@ -3,7 +3,7 @@ import fetch from 'node-fetch'
 import fs from 'fs'
 const server: fastify.FastifyInstance = fastify.default({ logger: true })
 const servers: Array<string> = [
-    "https://slimeserver.herokuapp.com",
+    "https://slimeserver2.herokuapp.com",
     "https://sl-aliceblue.herokuapp.com",
     "https://sl-azure.herokuapp.com",
     "https://sl-crimson.herokuapp.com",
@@ -49,7 +49,7 @@ server.get(
     "/route",
     async (req, res) => {
         const arr = [
-            { latency: latency['https://slimeserver.herokuapp.com'], name: "https://slimeserver.herokuapp.com" },
+            { latency: latency['https://slimeserver2.herokuapp.com'], name: "https://slimeserver2.herokuapp.com" },
             { latency: latency['https://sl-azure.herokuapp.com'], name: "https://sl-azure.herokuapp.com" },
             { latency: latency['https://sl-crimson.herokuapp.com'], name: "https://sl-crimson.herokuapp.com" },
             { latency: latency['https://sl-magenta.herokuapp.com'], name: "https://sl-magenta.herokuapp.com" },
@@ -60,8 +60,8 @@ server.get(
             return `NullPointerException: Query is not an instance of object`
         }
 
-        users[req.query.nomor] = 'https://slimeserver.herokuapp.com'
-        res.send("https://slimeserver.herokuapp.com")
+        users[req.query.nomor] = 'https://slimeserver2.herokuapp.com'
+        res.send("https://slimeserver2.herokuapp.com")
     }
 )
 server.get(
